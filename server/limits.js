@@ -2,15 +2,14 @@
 // limits.js: rate limits, daily caps (total and per visitor), size caps.
 // Pure logic. No network, no globals except the counters passed in. Easy to test.
 
-const MAX_TEXT_CHARS = 4000;
-const MAX_IMAGE_BYTES = 1.5 * 1024 * 1024;
-const MAX_BODY_BYTES = 2.2 * 1024 * 1024; // base64 inflates ~33%, plus JSON wrapper
+// A motto request is { word <= 40, blazon <= 120 } plus JSON wrapper. 2 KB is generous.
+const MAX_BODY_BYTES = 2 * 1024;
 
 const DEFAULTS = {
   windowMs: 60 * 1000,
   perIpPerWindow: 6,
   perDevicePerWindow: 4,
-  dailyCap: parseInt(process.env.DAILY_CAP || '50', 10) || 50, // total reads per day, all visitors
+  dailyCap: parseInt(process.env.DAILY_CAP || '50', 10) || 50, // total motto calls per day, all visitors
   perIpPerDay: parseInt(process.env.IP_DAILY_CAP || '10', 10) || 10, // so one visitor can't use them all
   dayMs: 24 * 60 * 60 * 1000
 };
@@ -72,28 +71,5 @@ function createLimiter(options) {
   return { check };
 }
 
-// Validates the request body shape and sizes. Returns { ok, error?, value? }.
-function checkRequestBody(body) {
-  if (!body || typeof body !== 'object' || Array.isArray(body)) return { ok: false, error: 'bad_request' };
-  const mode = body.mode;
-  if (mode !== 'paste' && mode !== 'typed' && mode !== 'photo') return { ok: false, error: 'bad_request' };
-
-  if (mode === 'photo') {
-    if (typeof body.image !== 'string' || body.image.length === 0) return { ok: false, error: 'bad_request' };
-    if (!/^[A-Za-z0-9+/]+=*$/.test(body.image)) return { ok: false, error: 'bad_request' };
-    const bytes = Math.floor(body.image.length * 3 / 4);
-    if (bytes > MAX_IMAGE_BYTES) return { ok: false, error: 'too_large' };
-    return { ok: true, value: { mode, image: body.image } };
-  }
-
-  if (typeof body.text !== 'string') return { ok: false, error: 'bad_request' };
-  const text = body.text.trim();
-  if (text.length === 0) return { ok: false, error: 'bad_request' };
-  if (text.length > MAX_TEXT_CHARS) return { ok: false, error: 'too_large' };
-  return { ok: true, value: { mode, text } };
-}
-
-module.exports = {
-  MAX_TEXT_CHARS, MAX_IMAGE_BYTES, MAX_BODY_BYTES, DEFAULTS,
-  createLimiter, checkRequestBody
-};
+// Body shape checks live in validate.js.
+module.exports = { MAX_BODY_BYTES, DEFAULTS, createLimiter };

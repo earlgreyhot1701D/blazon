@@ -2,7 +2,8 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const limits = require('./limits');
-// STUB: const { writeMotto } = require('./gemma'); (Block 3, motto route)
+const { checkMottoBody, checkMottoOutput } = require('./validate');
+const { writeMotto } = require('./gemma');
 
 const PORT = parseInt(process.env.PORT || '3000', 10);
 const HOST = '0.0.0.0';
@@ -64,12 +65,54 @@ function readBody(req, maxBytes) {
   });
 }
 
-// STUB: POST /motto (Block 3)
-// Order, same as Tinctures: same-origin check, limiter.check, readBody + JSON.parse,
-// body check ({ word: string <= 40 chars, blazon: string <= 400 chars }), writeMotto(), six-line shape check
-// ({ motto: string <= 80, lore: string <= 600 }), sendJson 200. Errors: 429 daily_cap/slow_down,
-// 503 model_off, 504 model_timeout, 502 unreadable. Never log the body or the key.
-// Helpers above (sendJson, clientIp, readBody, limiter) are kept for it.
+// POST /motto. Order: same origin, rate limits and daily caps, body checks, model, output checks.
+// The browser already drew the arms. This route only returns words: { motto, lore }.
+async function handleMotto(req, res) {
+  try {
+    // Same origin only. A browser on another site sends an Origin header that won't match this host.
+    const origin = req.headers.origin;
+    if (origin) {
+      let sameOrigin = false;
+      try { sameOrigin = new URL(origin).host === req.headers.host; } catch { sameOrigin = false; }
+      if (!sameOrigin) return sendJson(res, 403, { error: 'origin' });
+    }
+    const gate = limiter.check({ ip: clientIp(req) });
+    if (!gate.ok) {
+      return sendJson(res, 429, { error: gate.reason === 'rate' ? 'slow_down' : 'daily_cap' },
+        { 'Retry-After': String(gate.retryAfterSec) });
+    }
+    let body;
+    try {
+      body = JSON.parse(await readBody(req, limits.MAX_BODY_BYTES));
+    } catch (err) {
+      return sendJson(res, err.message === 'too_large' ? 413 : 400, { error: err.message === 'too_large' ? 'too_large' : 'bad_request' });
+    }
+    const checked = checkMottoBody(body);
+    if (!checked.ok) return sendJson(res, checked.error === 'too_large' ? 413 : 400, { error: checked.error });
+
+    let raw;
+    const startedAt = Date.now();
+    try {
+      raw = await writeMotto(checked.value);
+      console.log('model ok in', Date.now() - startedAt, 'ms');
+    } catch (err) {
+      const code = err && err.message;
+      console.error('model call failed:', code, 'after', Date.now() - startedAt, 'ms'); // code only, never the body or key
+      if (code === 'model_off') return sendJson(res, 503, { error: 'model_off' });
+      if (code === 'model_timeout') return sendJson(res, 504, { error: 'model_timeout' });
+      return sendJson(res, 502, { error: 'unreadable' });
+    }
+    const result = checkMottoOutput(raw);
+    if (!result.ok) {
+      console.error('model output rejected:', result.why); // reason code only, never the content
+      return sendJson(res, 502, { error: 'unreadable' });
+    }
+    return sendJson(res, 200, result.value);
+  } catch (err) {
+    console.error('motto handler error:', err && err.message);
+    return sendJson(res, 500, { error: 'server_error' });
+  }
+}
 
 const server = http.createServer((req, res) => {
   const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
@@ -86,7 +129,11 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // STUB: if (pathname === '/motto') { POST only, else 405; handleMotto(req, res); return; }
+  if (pathname === '/motto') {
+    if (req.method !== 'POST') return sendJson(res, 405, { error: 'method' }, { Allow: 'POST' });
+    handleMotto(req, res);
+    return;
+  }
 
   // Handle static assets
   const rawPath = req.url.split('?')[0];
