@@ -8,7 +8,7 @@
 
 ## 1. The problem
 
-Custom coat-of-arms prints are a real Etsy category. Buyers pay $10 to $15 for one. Most sellers either draw by hand (slow, pricey) or use a random generator (different every time, so it isn't really *yours*).
+Personalized coat-of-arms art is a real Etsy category. One personalized crest download listed there at $70 (checked Oct 15 2026). Most sellers either draw by hand (slow, pricey) or use a random generator (different every time, so it isn't really *yours*).
 
 Blazon gives you arms that belong to your word. Same word, same arms, forever. You can check it. Then a herald gives it a voice.
 
