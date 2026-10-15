@@ -1210,7 +1210,7 @@ footer {
   font-weight: 500;
   line-height: 1.35;
   text-align: left;
-  white-space: normal;
+  white-space: pre-line;
   z-index: 50;
   opacity: 0;
   visibility: hidden;
