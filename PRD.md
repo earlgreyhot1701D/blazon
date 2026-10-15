@@ -62,6 +62,7 @@ The model writes the caption. The math draws the picture.
 | STUB | Ollama provider (self-hosted Gemma). Stub is in `server/gemma.js` |
 | STUB | Etsy listing text export (title, tags, description) |
 | STUB | Deterministic motto seed (same word, same motto) |
+| STUB | Version the rule table (hash + mapping) and lock known words in regression fixtures, so a refactor can't change a printed crest. Oct 15 lesson: the Stitch redesign already changed July's arms |
 | NEVER | Model touches the arms, tinctures, charge, or blazon text |
 | NEVER | Payment inside the app, accounts, or storing anything about the user |
 | NEVER | `innerHTML`, `eval`, `Math.random`, API key in the browser |

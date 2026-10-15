@@ -437,6 +437,7 @@
     elemArrangement.classList.add("empty-val");
 
     // Reset swatch styles safely (no style="")
+    [swatchField, swatchTinctures, swatchCharge, swatchArrangement].forEach(function(sw) { sw.style.background = ""; });
     swatchField.className = "mini-swatch swatch-empty";
     swatchTinctures.className = "mini-swatch swatch-empty";
     swatchCharge.className = "mini-swatch swatch-empty";
@@ -452,11 +453,25 @@
     mottoSource.classList.add("hidden");
   }
 
+  // Paints the four mini swatches from this shield's tinctures (CSSOM, so the CSP allows it).
   function updateSwatches(design) {
-    swatchField.className = "mini-swatch swatch-fill-avalon-field";
-    swatchTinctures.className = "mini-swatch swatch-fill-avalon-tinctures";
-    swatchCharge.className = "mini-swatch swatch-fill-avalon-charge";
-    swatchArrangement.className = "mini-swatch swatch-fill-avalon-arrangement";
+    var one = design.tinctureOne.hex;
+    var two = design.isPlain ? design.chargeTincture.hex : design.tinctureTwo.hex;
+    var fieldAngle = {
+      "per-pale": "90deg", "per-fess": "180deg", "per-bend": "135deg",
+      "per-chevron": "180deg", "quarterly": "90deg"
+    }[design.division.id];
+    [swatchField, swatchTinctures, swatchCharge, swatchArrangement].forEach(function(sw) {
+      sw.className = "mini-swatch";
+    });
+    swatchField.style.background = design.isPlain
+      ? one
+      : "linear-gradient(" + fieldAngle + ", " + one + " 50%, " + two + " 50%)";
+    swatchTinctures.style.background = "linear-gradient(90deg, " + one + " 50%, " + two + " 50%)";
+    swatchCharge.style.background = "radial-gradient(circle, " + two + " 42%, " + one + " 46%)";
+    swatchArrangement.style.background = design.isPlain
+      ? "radial-gradient(circle, " + two + " 42%, " + one + " 46%)"
+      : "linear-gradient(45deg, " + two + " 50%, " + one + " 50%)";
   }
 
   function renderArms(shouldAnimate) {
@@ -623,6 +638,11 @@
   }
 
   // Ask Herald for Motto handler
+  // True when the shield on screen is no longer the one that asked the herald.
+  function isStale(design) {
+    return !currentDesign || currentDesign.clean !== design.clean;
+  }
+
   async function handleAskMotto() {
     if (!currentDesign) return;
     var design = currentDesign;
@@ -649,6 +669,7 @@
         body: JSON.stringify({ word: design.rawWord, blazon: design.blazon }),
         signal: controller.signal
       });
+      if (isStale(design)) return;
 
       if (response.status === 429) {
         mottoLine.textContent = fallbackMotto(design);
@@ -657,6 +678,7 @@
         mottoSource.classList.remove("hidden");
       } else if (response.status === 200) {
         var reply = await response.json();
+        if (isStale(design)) return;
         if (reply && typeof reply.motto === "string" && typeof reply.lore === "string") {
           mottoLine.textContent = reply.motto.slice(0, 80);
           mottoLine.classList.remove("hidden");
@@ -677,6 +699,7 @@
         mottoSource.classList.remove("hidden");
       }
     } catch (error) {
+      if (isStale(design)) return;
       mottoLine.textContent = fallbackMotto(design);
       mottoLine.classList.remove("hidden");
       mottoSource.textContent = "The herald is away. This motto is from the house list.";
