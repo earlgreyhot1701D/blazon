@@ -254,11 +254,25 @@ Free to download. If you print it and hang it, <a href="https://buymeacoffee.com
 <footer>
 <p class="footer-guarantee">Real heraldic grammar · deterministic · no randomness · nothing stored</p>
 <p class="footer-tech">Handcrafted with formal heraldic blazonry &amp; responsive SVG vector illumination.</p>
+<p class="footer-tech footer-links"><button class="about-link" id="btn-about" type="button">About Blazon</button> · <a href="https://github.com/earlgreyhot1701D/blazon" rel="noopener noreferrer" target="_blank">Source</a> · <a href="https://clewlabs.org" rel="noopener" target="_blank">clewlabs.org</a></p>
 </footer>
 </div>
 <!-- Copied Toast Feedback -->
 <div aria-live="polite" class="heraldic-toast" id="toast" role="status">
 <span>✦</span> <span id="toast-msg">Copied to clipboard!</span>
 </div>
+<dialog aria-labelledby="about-title" class="about-dialog" id="about-dialog">
+<div class="about-inner">
+<h2 id="about-title">About Blazon</h2>
+<p>Type a word. Blazon hashes it and runs a fixed table of heraldic rules to draw a coat of arms and write its formal blazon. Same word, same arms, every time. You can check it.</p>
+<p>Ask the herald, and Gemma, Google's open-weight model, writes a motto and a short piece of lore for those arms. The model never touches the arms themselves. If the herald is away, you get a motto from the house list instead.</p>
+<p>Nothing is stored. Your word goes to the server only when you ask for a motto, and it is never logged.</p>
+<p>Made by L. Cordero for the DEV Hacktoberfest Open-Source AI Challenge. A Clew Suite tool.</p>
+<p class="about-links"><a href="https://clewlabs.org" rel="noopener" target="_blank">clewlabs.org</a> · <a href="https://github.com/earlgreyhot1701D/blazon" rel="noopener noreferrer" target="_blank">Source on GitHub</a> · <a href="https://buymeacoffee.com/earlgreyhot1701d" rel="noopener noreferrer" target="_blank">Buy me a coffee</a></p>
+<p class="about-sig">AI assisted. Human approved. Powered by NLP.</p>
+<button class="about-close" id="btn-about-close" type="button">Close</button>
+</div>
+</dialog>
 <script src="app.js"></script>
+<script src="about.js"></script>
 </body></html>

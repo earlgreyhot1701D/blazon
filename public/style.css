@@ -1092,3 +1092,99 @@ footer {
   margin-top: 2px;
   font-size: 0.62rem;
 }
+
+/* ===== Fit on one laptop screen (desktop only). Added Oct 15. Remove this block to undo. ===== */
+@media (min-width: 980px) {
+  body { padding: 10px 20px 10px; }
+  .folio { padding: 12px 26px 12px; }
+  .corner { width: 26px; height: 26px; }
+  header { margin-bottom: 8px; }
+  .badge-bar { margin-bottom: 4px; }
+  .feature-pill { padding: 2px 9px; font-size: 0.6rem; }
+  .title-banner { margin: 0 0 2px; }
+  .illuminated-letter { width: 42px; height: 46px; font-size: 2.3rem; }
+  .title-text { font-size: 2.2rem; }
+  .subtitle { font-size: 0.95rem; }
+  .header-divider { display: none; }
+  .armorial-grid { gap: 14px; }
+  .panel-card { padding: 11px 12px; }
+  .col-left, .col-right { gap: 12px; }
+  .col-center { padding: 10px 12px 12px; }
+  .arms-heading-wrap { margin-bottom: 2px; }
+  .shield-stage-wrapper { min-height: 236px; padding: 2px 0; }
+  .shield-mount { width: 196px; height: 232px; }
+  .botanical-flank { height: 80%; }
+  .blazon-scroll-wrap { margin-top: 6px; }
+  .blazon-scroll-body { padding: 8px 16px 10px; }
+  footer { margin-top: 8px; padding-top: 6px; }
+}
+
+/* ===== About dialog ===== */
+.footer-links { margin-top: 2px; }
+.about-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--crimson-deep);
+  text-decoration: underline;
+  text-decoration-color: var(--gold-dark);
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.footer-links a { color: var(--crimson-deep); text-decoration-color: var(--gold-dark); text-underline-offset: 2px; }
+.about-link:hover, .footer-links a:hover { color: var(--crimson); }
+.about-dialog {
+  margin: auto;
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  max-width: 560px;
+  width: calc(100% - 32px);
+  padding: 0;
+  border: 2px solid var(--gold-dark);
+  border-radius: var(--radius-sm);
+  background: var(--parchment);
+  color: var(--ink);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6), inset 0 0 0 4px var(--parchment), inset 0 0 0 5px rgba(191, 160, 84, 0.6);
+}
+.about-dialog::backdrop { background: rgba(18, 7, 10, 0.72); }
+.about-inner { padding: 22px 24px 18px; font-size: 1.05rem; line-height: 1.5; }
+.about-inner h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.25rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--crimson-deep);
+  margin: 0 0 10px;
+  text-align: center;
+}
+.about-inner p { margin: 0 0 10px; }
+.about-inner .about-links {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  text-align: center;
+  margin-top: 14px;
+}
+.about-inner .about-links a { color: var(--crimson-deep); text-decoration-color: var(--gold-dark); }
+.about-inner .about-sig {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--ink-faint);
+  text-align: center;
+  margin: 6px 0 0;
+}
+.about-close {
+  display: block;
+  margin: 14px auto 0;
+  padding: 6px 18px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff2db;
+  background: var(--crimson-deep);
+  border: 1px solid var(--gold-dark);
+  border-radius: 3px;
+  cursor: pointer;
+}
+.about-close:hover { background: var(--crimson); }
