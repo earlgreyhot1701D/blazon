@@ -1,0 +1,24 @@
+{
+  "name": "blazon",
+  "version": "0.1.0",
+  "description": "One word, one coat of arms, always the same. Gemma writes the motto.",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "lint": "eslint ."
+  },
+  "keywords": [
+    "gemma",
+    "heraldry",
+    "deterministic",
+    "hf26challenge"
+  ],
+  "author": "Shara",
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.12.0",
+    "eslint-plugin-no-unsanitized": "^4.1.5",
+    "globals": "^17.13.0"
+  }
+}

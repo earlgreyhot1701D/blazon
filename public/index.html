@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Enter a word and receive a deterministic coat of arms with a formal heraldic blazon.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Blazon | Arms from a Word">
+  <meta property="og:description" content="One word becomes one deterministic coat of arms.">
+  <meta property="og:image" content="SITE_URL/og-blazon.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Blazon | Arms from a Word">
+  <meta name="twitter:description" content="One word becomes one deterministic coat of arms.">
+  <meta name="twitter:image" content="SITE_URL/og-blazon.png">
+  <title>Blazon | Arms from a Word</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=IBM+Plex+Mono:wght@400;500&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="folio">
+    <span class="corner top-left" aria-hidden="true"></span>
+    <span class="corner top-right" aria-hidden="true"></span>
+    <span class="corner bottom-left" aria-hidden="true"></span>
+    <span class="corner bottom-right" aria-hidden="true"></span>
+
+    <main>
+      <header>
+        <p class="kicker">A deterministic armorial</p>
+        <h1><span class="illuminated-letter">B</span><span class="title-rest">lazon</span></h1>
+        <p class="subtitle">One word. One coat of arms. Always the same.</p>
+      </header>
+
+      <section class="controls" aria-labelledby="word-label">
+        <label id="word-label" for="word-input">Word or name</label>
+        <input
+          id="word-input"
+          name="word"
+          type="text"
+          maxlength="64"
+          autocomplete="off"
+          autocapitalize="words"
+          spellcheck="false"
+          enterkeyhint="done"
+          placeholder="Enter a word to reveal its arms"
+        >
+        <div class="examples" aria-label="Example words">
+          <button class="example" type="button" data-word="Avalon">Avalon</button>
+          <button class="example" type="button" data-word="Rowan">Rowan</button>
+          <button class="example" type="button" data-word="Solstice">Solstice</button>
+          <button class="example" type="button" data-word="Valor">Valor</button>
+          <button class="example" type="button" data-word="Ember">Ember</button>
+        </div>
+      </section>
+
+      <section class="result" aria-live="polite" aria-atomic="true">
+        <div class="arms-card">
+          <p id="arms-name" class="arms-name">Awaiting inscription</p>
+          <div id="shield-stage" class="shield-stage"></div>
+          <div class="blazon-scroll">
+            <p id="blazon-line" class="blazon-line">Enter a word to reveal its arms.</p>
+          </div>
+          <p id="rule-note" class="rule-note">Every choice will come from your text.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Real heraldic grammar · deterministic · no randomness · nothing stored or sent</p>
+      <p>AI assisted. Human approved. Powered by NLP.</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

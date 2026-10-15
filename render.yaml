@@ -1,0 +1,35 @@
+# render.yaml: Blazon
+# Render Blueprint. Validate with: render blueprints validate render.yaml
+# Field names checked against the Blueprint spec on Oct 2 2026.
+services:
+  - type: web
+    name: blazon
+    runtime: node
+    # Free plan. Sleeps after 15 minutes idle; the UI shows a "waking the herald" state on cold start.
+    plan: free
+    region: oregon            # cannot change after creation
+    buildCommand: npm ci      # needs package-lock.json committed
+    startCommand: node server/index.js
+    healthCheckPath: /healthz
+    # commit = every push to the linked branch deploys.
+    # Flip to "off" at submission so the judged version stays frozen.
+    autoDeployTrigger: commit
+    envVars:
+      # Non-secret config. Safe to keep in the repo.
+      - key: NODE_ENV
+        value: production
+      - key: MODEL_PROVIDER
+        value: gemini
+      - key: DAILY_CAP
+        value: "50"            # total motto calls per day, all visitors
+      - key: IP_DAILY_CAP
+        value: "10"            # motto calls per day, one visitor
+      - key: MODEL_TIMEOUT_MS
+        value: "30000"
+      - key: MODEL_THINKING_LEVEL
+        value: MINIMAL
+      # Secrets. Render asks for these ONLY when the Blueprint is first created,
+      # and ignores sync:false vars on later syncs. Enter "unset" at creation,
+      # then set the real value by hand in Dashboard > Environment (Block 4).
+      - key: GEMINI_API_KEY
+        sync: false
