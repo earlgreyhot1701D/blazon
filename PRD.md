@@ -37,7 +37,7 @@ The model writes the caption. The math draws the picture.
 
 ## 4. Done, for the user
 
-1. Land on the page. One box: your word. Understand it in two seconds.
+1. Land on the page. One empty box: your word. No word typed in for them, no sample arms, no sample motto. Understand it in two seconds.
 2. Type a word. Arms and blazon appear instantly. Same word, same arms, every time.
 3. Ask the herald for a motto. Motto and lore appear in under ten seconds. If the server is asleep, a "waking the herald" message shows instead of nothing.
 4. Download for print. An SVG lands in downloads with the motto under the shield.
@@ -57,12 +57,30 @@ The model writes the caption. The math draws the picture.
 | MUST | Download SVG includes the motto |
 | MUST | "Waking the herald" state for Render free-tier cold start |
 | MUST | Buy Me a Coffee link |
+| MUST | Page loads empty. No prefilled word, no sample arms, no sample blazon, no sample motto or lore. Each area shows an empty state until the user acts. Example buttons stay, since the user has to click them |
+| MUST | About area links to clewlabs.org |
 | STUB | Ollama provider (self-hosted Gemma). Stub is in `server/gemma.js` |
 | STUB | Etsy listing text export (title, tags, description) |
 | STUB | Deterministic motto seed (same word, same motto) |
 | NEVER | Model touches the arms, tinctures, charge, or blazon text |
 | NEVER | Payment inside the app, accounts, or storing anything about the user |
 | NEVER | `innerHTML`, `eval`, `Math.random`, API key in the browser |
+| NEVER | Autopopulated content on load. Placeholder text in the input is fine; a real value is not |
+
+## 5a. Empty states (what the page shows before the user acts)
+
+| Area | Empty state |
+|---|---|
+| Word input | Empty, placeholder "Inscribe a word..." |
+| Arms title | "Awaiting inscription" |
+| Shield | Blank outline of the shield, no tinctures |
+| Blazon line | "Enter a word to reveal its arms." |
+| Heraldic elements | Each row shows a dash |
+| Motto line | Hidden, takes no space |
+| Herald panel | Lore empty; motto button disabled until arms exist |
+| Copy, Download, Share | Disabled until arms exist |
+
+Note: the current Stitch build loads with "Avalon" filled in and drawn. That gets removed in Block 2.
 
 ## 6. Architecture
 

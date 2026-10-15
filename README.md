@@ -57,7 +57,7 @@ render.yaml      Render blueprint (free plan)
 
 ## Credits
 
-Server carried over from [Two Sisters Tinctures](https://github.com/earlgreyhot1701D/two-sisters-tinctures). UI designed in Stitch. Built with GitHub Copilot and Claude.
+Part of [Clew Suite](https://clewlabs.org). Server carried over from [Two Sisters Tinctures](https://github.com/earlgreyhot1701D/two-sisters-tinctures). UI designed in Stitch. Built with GitHub Copilot and Claude.
 
 AI assisted. Human approved. Powered by NLP.
 
