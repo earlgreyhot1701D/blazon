@@ -1,3 +1,5 @@
+![Blazon: One word. One coat of arms. Always the same.](public/og-blazon.jpg)
+
 # Blazon
 
 **One word. One coat of arms. Always the same. Gemma writes the motto.**
@@ -61,6 +63,6 @@ Part of [Clew Suite](https://clewlabs.org). Server carried over from [Two Sister
 
 AI assisted. Human approved. Powered by NLP.
 
-If you print one and hang it, [buy me a coffee](https://buymeacoffee.com/). _(link TBD)_
+If you print one and hang it, [buy me a coffee](https://buymeacoffee.com/earlgreyhot1701d).
 
 MIT License.

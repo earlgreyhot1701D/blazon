@@ -56,7 +56,7 @@ The model writes the caption. The math draws the picture.
 | MUST | Daily cap (total) and per-visitor cap. Key in env only |
 | MUST | Download SVG includes the motto |
 | MUST | "Waking the herald" state for Render free-tier cold start |
-| MUST | Buy Me a Coffee link |
+| MUST | Buy Me a Coffee link (buymeacoffee.com/earlgreyhot1701d) |
 | MUST | Page loads empty. No prefilled word, no sample arms, no sample blazon, no sample motto or lore. Each area shows an empty state until the user acts. Example buttons stay, since the user has to click them |
 | MUST | About area links to clewlabs.org |
 | STUB | Ollama provider (self-hosted Gemma). Stub is in `server/gemma.js` |
