@@ -6,7 +6,7 @@
 
 Type a word. Blazon hashes it, runs a fixed table of heraldic rules, and draws the arms with a formal blazon. Same word, same arms, every time, and you can check it. Then ask the herald, and Gemma writes a motto and a short piece of lore grounded in the arms it was given.
 
-**Live:** _(Render URL after deploy)_
+**Live:** https://blazon-g3jl.onrender.com
 **Write-up:** _(dev.to link after publish)_
 **Built for:** DEV Hacktoberfest Open-Source AI Challenge, Week 2: Side Hustle
 
