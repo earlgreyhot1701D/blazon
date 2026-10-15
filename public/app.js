@@ -37,6 +37,21 @@
     { id: "escutcheon", name: "escutcheon", article: "an", desc: "a shield within a shield, signifying profound heritage" }
   ];
 
+  var FALLBACK_MOTTOS = [
+    "Steady in the long night",
+    "By patience, the tower stands",
+    "What is kept, endures",
+    "Quiet hands, open door",
+    "Hold the line, light the way",
+    "Slow roots, tall oak",
+    "Neither first nor last, but faithful",
+    "The tide returns",
+    "Kindness is a shield",
+    "Ask, and be answered",
+    "We mend what we break",
+    "Small fires, long winters"
+  ];
+
   // DOM Elements
   var wordInput = document.getElementById("word-input");
   var btnClear = document.getElementById("btn-clear");
@@ -107,6 +122,10 @@
 
   function pick(list, seed) {
     return list[seed % list.length];
+  }
+
+  function fallbackMotto(design) {
+    return pick(FALLBACK_MOTTOS, derive(hashString(design.clean), 9));
   }
 
   function designArms(rawText) {
@@ -556,8 +575,27 @@
     var svgEl = shieldMount.querySelector("svg");
     if (!svgEl) return;
 
+    var svgToSerialize = svgEl;
+    if (mottoLine.textContent) {
+      svgToSerialize = svgEl.cloneNode(true);
+      var viewBox = svgToSerialize.getAttribute("viewBox").split(/\s+/);
+      viewBox[3] = String(Number(viewBox[3]) + 40);
+      svgToSerialize.setAttribute("viewBox", viewBox.join(" "));
+
+      var mottoText = document.createElementNS(SVG_NS, "text");
+      mottoText.setAttribute("x", "200");
+      mottoText.setAttribute("y", "465");
+      mottoText.setAttribute("text-anchor", "middle");
+      mottoText.setAttribute("font-size", "16");
+      mottoText.setAttribute("font-family", "Cormorant Garamond, Georgia, serif");
+      mottoText.setAttribute("font-style", "italic");
+      mottoText.setAttribute("fill", "#4a1622");
+      mottoText.textContent = mottoLine.textContent;
+      svgToSerialize.appendChild(mottoText);
+    }
+
     var serializer = new XMLSerializer();
-    var source = serializer.serializeToString(svgEl);
+    var source = serializer.serializeToString(svgToSerialize);
     if (!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)) {
       source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
     }
@@ -585,23 +623,72 @@
   }
 
   // Ask Herald for Motto handler
-  function handleAskMotto() {
+  async function handleAskMotto() {
     if (!currentDesign) return;
-    btnMotto.disabled = true;
-    btnMotto.classList.add("loading");
-    mottoStatus.textContent = "The herald is consulting the rolls...";
-    mottoStatus.classList.remove("hidden");
+    var design = currentDesign;
+    var statusTimer = null;
+    var abortTimer = null;
 
-    setTimeout(function() {
-      mottoLine.textContent = "Steady in the long night";
+    try {
+      btnMotto.disabled = true;
+      btnMotto.classList.add("loading");
+      mottoStatus.textContent = "The herald is consulting the rolls...";
+      mottoStatus.classList.remove("hidden");
+
+      var controller = new AbortController();
+      statusTimer = setTimeout(function() {
+        mottoStatus.textContent = "Waking the herald. The first request of the day takes about a minute.";
+      }, 8000);
+      abortTimer = setTimeout(function() {
+        controller.abort();
+      }, 45000);
+
+      var response = await fetch("/motto", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ word: design.rawWord, blazon: design.blazon }),
+        signal: controller.signal
+      });
+
+      if (response.status === 429) {
+        mottoLine.textContent = fallbackMotto(design);
+        mottoLine.classList.remove("hidden");
+        mottoSource.textContent = "The herald has reached today's limit. This motto is from the house list.";
+        mottoSource.classList.remove("hidden");
+      } else if (response.status === 200) {
+        var reply = await response.json();
+        if (reply && typeof reply.motto === "string" && typeof reply.lore === "string") {
+          mottoLine.textContent = reply.motto.slice(0, 80);
+          mottoLine.classList.remove("hidden");
+          loreDesc.textContent = reply.lore.slice(0, 600);
+          loreDesc.classList.remove("hidden");
+          mottoSource.textContent = "Motto and lore written by Gemma. The arms were drawn by the rules alone.";
+          mottoSource.classList.remove("hidden");
+        } else {
+          mottoLine.textContent = fallbackMotto(design);
+          mottoLine.classList.remove("hidden");
+          mottoSource.textContent = "The herald is away. This motto is from the house list.";
+          mottoSource.classList.remove("hidden");
+        }
+      } else {
+        mottoLine.textContent = fallbackMotto(design);
+        mottoLine.classList.remove("hidden");
+        mottoSource.textContent = "The herald is away. This motto is from the house list.";
+        mottoSource.classList.remove("hidden");
+      }
+    } catch (error) {
+      mottoLine.textContent = fallbackMotto(design);
       mottoLine.classList.remove("hidden");
-      loreDesc.textContent = "Upon a field of sable and silver the cross stands counterchanged, each half answering the other. The old rolls say such arms were given to households that kept their word in hard winters.";
-      loreDesc.classList.remove("hidden");
-      mottoStatus.textContent = "Motto and lore inscribed.";
+      mottoSource.textContent = "The herald is away. This motto is from the house list.";
       mottoSource.classList.remove("hidden");
+    } finally {
+      if (statusTimer) clearTimeout(statusTimer);
+      if (abortTimer) clearTimeout(abortTimer);
       btnMotto.disabled = false;
       btnMotto.classList.remove("loading");
-    }, 1200);
+      mottoStatus.textContent = "";
+      mottoStatus.classList.add("hidden");
+    }
   }
 
   // Event listeners
