@@ -39,16 +39,21 @@
 
   // DOM Elements
   var wordInput = document.getElementById("word-input");
+  var btnClear = document.getElementById("btn-clear");
   var btnGenerate = document.getElementById("btn-generate");
   var armsTitle = document.getElementById("arms-title");
   var shieldMount = document.getElementById("shield-mount");
   var blazonText = document.getElementById("blazon-text");
+  var mottoLine = document.getElementById("motto-line");
   var tinctureRule = document.getElementById("tincture-rule");
   var elemField = document.getElementById("elem-field");
   var elemTinctures = document.getElementById("elem-tinctures");
   var elemCharge = document.getElementById("elem-charge");
   var elemArrangement = document.getElementById("elem-arrangement");
   var loreDesc = document.getElementById("lore-description");
+  var btnMotto = document.getElementById("btn-motto");
+  var mottoStatus = document.getElementById("motto-status");
+  var mottoSource = document.getElementById("motto-source");
   var swatchField = document.getElementById("swatch-field");
   var swatchTinctures = document.getElementById("swatch-tinctures");
   var swatchCharge = document.getElementById("swatch-charge");
@@ -106,7 +111,7 @@
 
   function designArms(rawText) {
     var clean = rawText.trim().toLowerCase();
-    if (!clean) clean = "avalon";
+    if (!clean) return null;
     var hash = hashString(clean);
 
     var division = pick(divisions, derive(hash, 1));
@@ -128,7 +133,7 @@
 
     return {
       clean: clean,
-      rawWord: rawText.trim() || "Avalon",
+      rawWord: rawText.trim(),
       division: division,
       tinctureOne: tinctureOne,
       tinctureTwo: tinctureTwo,
@@ -194,6 +199,49 @@
       group.appendChild(createSvg("rect", { x: 0, y: 0, width: 200, height: 215, fill: fill1 }));
       group.appendChild(createSvg("rect", { x: 200, y: 215, width: 200, height: 225, fill: fill1 }));
     }
+  }
+
+  function buildEmptyShieldSvg() {
+    var svg = createSvg("svg", {
+      viewBox: "0 0 400 440",
+      xmlns: SVG_NS,
+      role: "img",
+      "aria-label": "Empty heraldic shield awaiting inscription"
+    });
+
+    // Soft parchment interior fill
+    svg.appendChild(createSvg("path", {
+      d: SHIELD_PATH,
+      fill: "rgba(240, 230, 212, 0.65)",
+      stroke: "rgba(120, 85, 48, 0.4)",
+      "stroke-width": 2,
+      "stroke-dasharray": "6 6",
+      "stroke-linejoin": "round"
+    }));
+
+    // Subtle center question mark / crest whisper
+    var questionText = createSvg("text", {
+      x: "200",
+      y: "235",
+      "text-anchor": "middle",
+      fill: "rgba(156, 138, 119, 0.45)",
+      "font-family": "Cinzel, Georgia, serif",
+      "font-size": "72",
+      "font-weight": "600"
+    });
+    questionText.textContent = "?";
+    svg.appendChild(questionText);
+
+    // Thin inner decorative margin
+    svg.appendChild(createSvg("path", {
+      d: "M 74 46 L 326 46 L 326 184 C 326 278 270 348 200 388 C 130 348 74 278 74 184 Z",
+      fill: "none",
+      stroke: "rgba(191, 160, 84, 0.35)",
+      "stroke-width": 1.5,
+      "stroke-dasharray": "4 4"
+    }));
+
+    return svg;
   }
 
   function buildShieldSvg(design) {
@@ -318,28 +366,102 @@
     return svg;
   }
 
-  function updateSwatches(design) {
-    var t1 = design.tinctureOne.hex;
-    var t2 = design.tinctureTwo ? design.tinctureTwo.hex : t1;
-
-    if (design.isPlain) {
-      swatchField.style.background = t1;
-      swatchTinctures.style.background = "linear-gradient(135deg, " + t1 + " 50%, " + design.chargeTincture.hex + " 50%)";
-      swatchCharge.style.background = design.chargeTincture.hex;
-      swatchArrangement.style.background = t1;
-    } else {
-      swatchField.style.background = "linear-gradient(135deg, " + t1 + " 50%, " + t2 + " 50%)";
-      swatchTinctures.style.background = "linear-gradient(90deg, " + t1 + " 50%, " + t2 + " 50%)";
-      swatchCharge.style.background = "radial-gradient(circle, " + t2 + " 45%, " + t1 + " 50%)";
-      swatchArrangement.style.background = "linear-gradient(45deg, " + t2 + " 50%, " + t1 + " 50%)";
+  function clearElementChildren(el) {
+    while (el.firstChild) {
+      el.removeChild(el.firstChild);
     }
+  }
+
+  function renderEmptyState() {
+    currentDesign = null;
+
+    // Clear active example pills
+    exampleButtons.forEach(function(btn) {
+      btn.classList.remove("active");
+    });
+
+    // Hide clear button
+    btnClear.classList.remove("visible");
+
+    // Centerpiece empty state
+    armsTitle.textContent = "Awaiting inscription";
+    armsTitle.classList.add("empty-state");
+
+    shieldMount.classList.add("empty-mount");
+    clearElementChildren(shieldMount);
+    shieldMount.appendChild(buildEmptyShieldSvg());
+
+    blazonText.textContent = "Enter a word to reveal its arms.";
+    blazonText.classList.add("empty-state");
+
+    mottoLine.textContent = "";
+    mottoLine.classList.add("hidden");
+    tinctureRule.classList.add("hidden");
+
+    // Action buttons disabled
+    btnCopyBlazon.disabled = true;
+    btnDownloadSvg.disabled = true;
+    btnShareLink.disabled = true;
+    btnMotto.disabled = true;
+
+    // Heraldic elements empty state
+    elemField.textContent = "—";
+    elemField.classList.add("empty-val");
+
+    elemTinctures.textContent = "—";
+    elemTinctures.classList.add("empty-val");
+
+    elemCharge.textContent = "—";
+    elemCharge.classList.add("empty-val");
+
+    elemArrangement.textContent = "—";
+    elemArrangement.classList.add("empty-val");
+
+    // Reset swatch styles safely (no style="")
+    swatchField.className = "mini-swatch swatch-empty";
+    swatchTinctures.className = "mini-swatch swatch-empty";
+    swatchCharge.className = "mini-swatch swatch-empty";
+    swatchArrangement.className = "mini-swatch swatch-empty";
+
+    // Right column lore empty state
+    loreDesc.textContent = "";
+    loreDesc.classList.add("hidden");
+
+    mottoStatus.textContent = "";
+    mottoStatus.classList.add("hidden");
+
+    mottoSource.classList.add("hidden");
+  }
+
+  function updateSwatches(design) {
+    swatchField.className = "mini-swatch swatch-fill-avalon-field";
+    swatchTinctures.className = "mini-swatch swatch-fill-avalon-tinctures";
+    swatchCharge.className = "mini-swatch swatch-fill-avalon-charge";
+    swatchArrangement.className = "mini-swatch swatch-fill-avalon-arrangement";
   }
 
   function renderArms(shouldAnimate) {
     var rawVal = wordInput.value.trim();
-    var word = rawVal || "Avalon";
-    var design = designArms(word);
+    if (!rawVal) {
+      renderEmptyState();
+      return;
+    }
+
+    var design = designArms(rawVal);
+    if (!design) {
+      renderEmptyState();
+      return;
+    }
+
     currentDesign = design;
+    btnClear.classList.add("visible");
+
+    // Reset motto line and herald status on new word rendering
+    mottoLine.textContent = "";
+    mottoLine.classList.add("hidden");
+    mottoStatus.textContent = "";
+    mottoStatus.classList.add("hidden");
+    mottoSource.classList.add("hidden");
 
     // Visual subtle reveal animation trigger
     if (shouldAnimate) {
@@ -350,31 +472,49 @@
     }
 
     // Update Title
-    armsTitle.textContent = "Arms of " + (rawVal || "Avalon");
+    armsTitle.textContent = "Arms of " + design.rawWord;
+    armsTitle.classList.remove("empty-state");
 
     // Clear and rebuild shield SVG
-    shieldMount.replaceChildren();
+    shieldMount.classList.remove("empty-mount");
+    clearElementChildren(shieldMount);
     shieldMount.appendChild(buildShieldSvg(design));
 
     // Update Blazon prose
     blazonText.textContent = design.blazon;
+    blazonText.classList.remove("empty-state");
+    tinctureRule.classList.remove("hidden");
+
+    // Enable action buttons
+    btnCopyBlazon.disabled = false;
+    btnDownloadSvg.disabled = false;
+    btnShareLink.disabled = false;
+    btnMotto.disabled = false;
 
     // Breakdown Elements
     elemField.textContent = design.division.label;
+    elemField.classList.remove("empty-val");
+
     elemTinctures.textContent = design.isPlain 
       ? design.tinctureOne.name + " (" + design.tinctureOne.type + ")"
       : design.tinctureOne.name + " and " + design.tinctureTwo.name;
+    elemTinctures.classList.remove("empty-val");
+
     elemCharge.textContent = "A " + design.charge.name;
+    elemCharge.classList.remove("empty-val");
+
     elemArrangement.textContent = design.isPlain ? "Proper" : "Counterchanged";
+    elemArrangement.classList.remove("empty-val");
 
     // Heraldic Lore Synthesis
-    var loreSentence = "Features " + design.division.desc + ", conjoined with " + design.charge.article + " " + design.charge.name + " " + design.charge.desc + ". The composition bestows upon " + (rawVal || "Avalon") + " an honorable lineage of timeless dignity and enduring virtue.";
+    var loreSentence = "Features " + design.division.desc + ", conjoined with " + design.charge.article + " " + design.charge.name + " " + design.charge.desc + ". The composition bestows upon " + design.rawWord + " an honorable lineage of timeless dignity and enduring virtue.";
     loreDesc.textContent = loreSentence;
+    loreDesc.classList.remove("hidden");
 
     updateSwatches(design);
 
     // Update active class on example pills
-    var lowerWord = word.toLowerCase();
+    var lowerWord = design.clean;
     exampleButtons.forEach(function(btn) {
       if (btn.getAttribute("data-word").toLowerCase() === lowerWord) {
         btn.classList.add("active");
@@ -400,8 +540,6 @@
   function fallbackCopy(text, successMsg) {
     var temp = document.createElement("textarea");
     temp.value = text;
-    temp.style.position = "fixed";
-    temp.style.opacity = "0";
     document.body.appendChild(temp);
     temp.select();
     try {
@@ -446,19 +584,56 @@
     copyTextToClipboard(newUrl, "Shareable URL copied to clipboard!");
   }
 
+  // Ask Herald for Motto handler
+  function handleAskMotto() {
+    if (!currentDesign) return;
+    btnMotto.disabled = true;
+    btnMotto.classList.add("loading");
+    mottoStatus.textContent = "The herald is consulting the rolls...";
+    mottoStatus.classList.remove("hidden");
+
+    setTimeout(function() {
+      mottoLine.textContent = "Steady in the long night";
+      mottoLine.classList.remove("hidden");
+      loreDesc.textContent = "Upon a field of sable and silver the cross stands counterchanged, each half answering the other. The old rolls say such arms were given to households that kept their word in hard winters.";
+      loreDesc.classList.remove("hidden");
+      mottoStatus.textContent = "Motto and lore inscribed.";
+      mottoSource.classList.remove("hidden");
+      btnMotto.disabled = false;
+      btnMotto.classList.remove("loading");
+    }, 1200);
+  }
+
   // Event listeners
   wordInput.addEventListener("input", function() {
-    renderArms(false);
+    if (wordInput.value.trim().length > 0) {
+      btnClear.classList.add("visible");
+      renderArms(false);
+    } else {
+      renderEmptyState();
+    }
+  });
+
+  btnClear.addEventListener("click", function() {
+    wordInput.value = "";
+    renderEmptyState();
+    wordInput.focus();
   });
 
   btnGenerate.addEventListener("click", function() {
-    renderArms(true);
+    if (wordInput.value.trim().length > 0) {
+      renderArms(true);
+    } else {
+      wordInput.focus();
+    }
   });
 
   wordInput.addEventListener("keydown", function(e) {
     if (e.key === "Enter") {
-      renderArms(true);
-      wordInput.blur();
+      if (wordInput.value.trim().length > 0) {
+        renderArms(true);
+        wordInput.blur();
+      }
     }
   });
 
@@ -468,6 +643,10 @@
       wordInput.value = word;
       renderArms(true);
     });
+  });
+
+  btnMotto.addEventListener("click", function() {
+    handleAskMotto();
   });
 
   btnCopyBlazon.addEventListener("click", function() {
@@ -493,9 +672,11 @@
   var queryWord = urlParams.get("word");
   if (queryWord && queryWord.trim()) {
     wordInput.value = queryWord.trim();
+    renderArms(false);
+  } else {
+    // Initial empty state on load
+    wordInput.value = "";
+    renderEmptyState();
   }
-
-  // Initial execution
-  renderArms(false);
 
 })();

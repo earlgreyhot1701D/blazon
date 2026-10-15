@@ -57,7 +57,8 @@
 </div>
 <p class="form-desc">Inscribe any word to generate its unique, invariant coat of arms and formal heraldic blazon.</p>
 <div class="input-wrapper">
-<input aria-label="Heraldic word or name" autocomplete="off" class="word-input" id="word-input" maxlength="40" placeholder="Inscribe a word..." spellcheck="false" type="text" value="Avalon"/>
+<input aria-label="Heraldic word or name" autocomplete="off" class="word-input" id="word-input" maxlength="40" placeholder="Inscribe a word..." spellcheck="false" type="text" value=""/>
+<button aria-label="Clear word input" class="btn-clear" id="btn-clear" title="Clear input" type="button">✕</button>
 </div>
 <button class="btn-generate" id="btn-generate" type="button">
 <svg viewbox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"></path></svg>
@@ -65,7 +66,7 @@
 </button>
 <p class="examples-label">Try an example:</p>
 <div aria-label="Example heraldic words" class="examples-pills" id="examples-list" role="group">
-<button class="example-btn active" data-word="Avalon" type="button">Avalon</button>
+<button class="example-btn" data-word="Avalon" type="button">Avalon</button>
 <button class="example-btn" data-word="Rowan" type="button">Rowan</button>
 <button class="example-btn" data-word="Solstice" type="button">Solstice</button>
 <button class="example-btn" data-word="Valor" type="button">Valor</button>
@@ -83,17 +84,20 @@
 <span class="step-title">Type</span>
 <span class="step-desc">Enter any word or name.</span>
 </div>
-<span class="flow-arrow">→</span>
 <div class="flow-step">
 <span class="step-num">2</span>
 <span class="step-title">Derive</span>
 <span class="step-desc">Hash-mapped heraldic rules.</span>
 </div>
-<span class="flow-arrow">→</span>
 <div class="flow-step">
 <span class="step-num">3</span>
 <span class="step-title">Blazon</span>
-<span class="step-desc">Unique arms &amp; formal Latin grammar.</span>
+<span class="step-desc">Unique arms &amp; Latin grammar.</span>
+</div>
+<div class="flow-step">
+<span class="step-num">4</span>
+<span class="step-title">Motto</span>
+<span class="step-desc">Gemma writes words; rules drew arms.</span>
 </div>
 </div>
 </section>
@@ -102,7 +106,7 @@
 <section aria-live="polite" class="col-center">
 <div class="arms-heading-wrap">
 <span class="flourish-icon">❧</span>
-<h1 class="arms-heading" id="arms-title">Arms of Avalon</h1>
+<h1 class="arms-heading empty-state" id="arms-title">Awaiting inscription</h1>
 <span class="flourish-icon">❧</span>
 </div>
 <div class="shield-stage-wrapper">
@@ -122,7 +126,7 @@
 <circle cx="20" cy="290" fill="#eecf87" r="3.5"></circle>
 </svg>
 <!-- SVG Shield Stage Mount -->
-<div class="shield-mount" id="shield-mount">
+<div class="shield-mount empty-mount" id="shield-mount">
 <!-- Dynamically injected SVG Shield -->
 </div>
 <!-- Right Botanical Vine Illumination with Gilded Berries & Acanthus Flourishes -->
@@ -145,30 +149,36 @@
 <div class="blazon-scroll-wrap">
 <div class="blazon-scroll-body">
 <div class="blazon-tag">✦ BLAZON ✦</div>
-<p class="blazon-prose" id="blazon-text">Per chevron Or and Azure, a mullet counterchanged.</p>
-<p class="tincture-rule-note" id="tincture-rule">Rule of tincture respected: metal and colour alternate.</p>
+<p class="blazon-prose empty-state" id="blazon-text">Enter a word to reveal its arms.</p>
+<!-- Motto banderole ribbon -->
+<div class="motto-ribbon hidden" id="motto-line"></div>
+<p class="tincture-rule-note hidden" id="tincture-rule">Rule of tincture respected: metal and colour alternate.</p>
 <!-- Quick-action heraldic utility buttons -->
 <div aria-label="Heraldic export actions" class="heraldic-actions" role="toolbar">
-<button class="action-btn" id="btn-copy-blazon" title="Copy formal blazon prose" type="button">
+<button class="action-btn" disabled="" id="btn-copy-blazon" title="Copy formal blazon prose" type="button">
 <svg viewbox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg>
 <span>Copy Blazon</span>
 </button>
-<button class="action-btn" id="btn-download-svg" title="Download vector SVG heraldry" type="button">
+<button class="action-btn" disabled="" id="btn-download-svg" title="Download vector SVG heraldry" type="button">
 <svg viewbox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"></path></svg>
 <span>Download SVG</span>
 </button>
-<button class="action-btn" id="btn-share-link" title="Copy shareable link with word parameter" type="button">
+<button class="action-btn" disabled="" id="btn-share-link" title="Copy shareable link with word parameter" type="button">
 <svg viewbox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg>
 <span>Share Arms</span>
 </button>
 </div>
+<!-- Colophon Link -->
+<p class="colophon-line">
+Free to download. If you print it and hang it, <a href="https://buymeacoffee.com/" id="coffee-link" rel="noopener noreferrer" target="_blank">buy me a coffee</a>.
+            </p>
 <button aria-label="Authentic Heraldic Seal" class="wax-seal" id="wax-seal-btn" title="Authentic Heraldic Certification" type="button">
               ⚜
             </button>
 </div>
 </div>
 </section>
-<!-- Right Column: Heraldic Elements & Lore Analysis -->
+<!-- Right Column: Heraldic Elements & The Herald Speaks -->
 <aside class="col-right">
 <section aria-labelledby="heraldic-elements-title" class="panel-card">
 <div class="panel-header">
@@ -178,42 +188,47 @@
 <div class="breakdown-list">
 <div class="breakdown-row">
 <div class="breakdown-label-group">
-<div aria-hidden="true" class="mini-swatch" id="swatch-field"></div>
+<div aria-hidden="true" class="mini-swatch swatch-empty" id="swatch-field"></div>
 <span class="breakdown-name">Field</span>
 </div>
-<span class="breakdown-value" id="elem-field">Per chevron</span>
+<span class="breakdown-value empty-val" id="elem-field">—</span>
 </div>
 <div class="breakdown-row">
 <div class="breakdown-label-group">
-<div aria-hidden="true" class="mini-swatch" id="swatch-tinctures"></div>
+<div aria-hidden="true" class="mini-swatch swatch-empty" id="swatch-tinctures"></div>
 <span class="breakdown-name">Tinctures</span>
 </div>
-<span class="breakdown-value" id="elem-tinctures">Or and Azure</span>
+<span class="breakdown-value empty-val" id="elem-tinctures">—</span>
 </div>
 <div class="breakdown-row">
 <div class="breakdown-label-group">
-<div aria-hidden="true" class="mini-swatch" id="swatch-charge"></div>
+<div aria-hidden="true" class="mini-swatch swatch-empty" id="swatch-charge"></div>
 <span class="breakdown-name">Charge</span>
 </div>
-<span class="breakdown-value" id="elem-charge">A mullet</span>
+<span class="breakdown-value empty-val" id="elem-charge">—</span>
 </div>
 <div class="breakdown-row">
 <div class="breakdown-label-group">
-<div aria-hidden="true" class="mini-swatch" id="swatch-arrangement"></div>
+<div aria-hidden="true" class="mini-swatch swatch-empty" id="swatch-arrangement"></div>
 <span class="breakdown-name">Arrangement</span>
 </div>
-<span class="breakdown-value" id="elem-arrangement">Counterchanged</span>
+<span class="breakdown-value empty-val" id="elem-arrangement">—</span>
 </div>
 </div>
 </section>
-<section aria-labelledby="about-design-title" class="panel-card">
+<section aria-labelledby="the-herald-speaks-title" class="panel-card">
 <div class="panel-header">
 <svg viewbox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"></path></svg>
-<h2 id="about-design-title">About this Design</h2>
+<h2 id="the-herald-speaks-title">The Herald Speaks</h2>
 </div>
-<p class="lore-text" id="lore-description">
-            An arched chevron denoting sanctuary and aspirational heights, conjoined with an eight-pointed star symbolizing guidance. The juxtaposition evokes Avalon — an eternal harbor of clarity and enduring valor.
-          </p>
+<p class="lore-text hidden" id="lore-description"></p>
+<button class="btn-motto" disabled="" id="btn-motto" type="button">
+<svg viewbox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"></path></svg>
+<span>Ask the herald for a motto</span>
+</button>
+<p class="motto-status hidden" id="motto-status"></p>
+<p class="motto-source hidden" id="motto-source">Motto and lore written by Gemma. The arms were drawn by the rules alone.</p>
+<p class="clew-suite-line">A Clew Suite tool · <a href="https://clewlabs.org" id="clew-link" rel="noopener" target="_blank">clewlabs.org</a></p>
 <div class="lore-divider">❖ ❖ ❖</div>
 </section>
 </aside>

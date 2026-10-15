@@ -1,6 +1,6 @@
 :root {
-  --bg-desk: #12070a;
-  --wood-dark: #1b0c10;
+  --bg-desk: #0a0406;
+  --wood-dark: #120609;
   --folio-border: #38121d;
   --parchment: #f6efe1;
   --parchment-deep: #ebdfc8;
@@ -14,7 +14,7 @@
   --gold: #bfa054;
   --gold-bright: #eecf87;
   --gold-dark: #7a5f22;
-  --candle-glow: rgba(255, 198, 108, 0.16);
+  --candle-glow: rgba(255, 185, 90, 0.12);
   --rule-line: rgba(120, 85, 48, 0.28);
   --card-bg: rgba(248, 243, 233, 0.92);
   --radius-sm: 4px;
@@ -33,13 +33,13 @@ body {
   min-height: 100dvh;
   background-color: var(--bg-desk);
   background-image: 
-    radial-gradient(circle at 50% 8%, rgba(255, 214, 138, 0.22) 0%, transparent 48%),
-    radial-gradient(circle at 10% 20%, rgba(220, 160, 60, 0.12) 0%, transparent 40%),
-    radial-gradient(circle at 90% 20%, rgba(220, 160, 60, 0.12) 0%, transparent 40%),
-    radial-gradient(ellipse at 50% 100%, rgba(99, 25, 41, 0.45) 0%, transparent 65%),
-    repeating-linear-gradient(90deg, rgba(28, 14, 18, 0.4) 0px, rgba(28, 14, 18, 0.4) 2px, transparent 2px, transparent 40px),
-    repeating-linear-gradient(0deg, rgba(10, 4, 6, 0.6) 0px, rgba(10, 4, 6, 0.6) 3px, transparent 3px, transparent 32px),
-    radial-gradient(circle at 50% 50%, #1e0d13 0%, #0d0407 100%);
+    radial-gradient(circle at 50% 6%, rgba(255, 200, 110, 0.16) 0%, transparent 45%),
+    radial-gradient(circle at 10% 20%, rgba(180, 110, 30, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 90% 20%, rgba(180, 110, 30, 0.08) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 100%, rgba(60, 12, 22, 0.55) 0%, transparent 60%),
+    repeating-linear-gradient(90deg, rgba(16, 7, 10, 0.7) 0px, rgba(16, 7, 10, 0.7) 2px, transparent 2px, transparent 40px),
+    repeating-linear-gradient(0deg, rgba(5, 2, 3, 0.8) 0px, rgba(5, 2, 3, 0.8) 3px, transparent 3px, transparent 32px),
+    radial-gradient(circle at 50% 50%, #12070a 0%, #050103 100%);
   color: var(--ink);
   font-family: 'Cormorant Garamond', Georgia, serif;
   line-height: 1.5;
@@ -65,7 +65,7 @@ body {
   transform: translateX(-50%);
   width: min(100vw, 1100px);
   height: 220px;
-  background: radial-gradient(ellipse at 50% 0%, rgba(255, 222, 148, 0.18) 0%, rgba(220, 140, 40, 0.08) 45%, transparent 75%);
+  background: radial-gradient(ellipse at 50% 0%, rgba(255, 210, 130, 0.14) 0%, rgba(180, 100, 20, 0.05) 45%, transparent 75%);
   pointer-events: none;
   z-index: 0;
 }
@@ -85,8 +85,8 @@ body {
   border: 4px solid var(--folio-border);
   border-radius: var(--radius-md);
   box-shadow: 
-    0 20px 50px rgba(0, 0, 0, 0.8),
-    0 2px 10px rgba(0, 0, 0, 0.4),
+    0 24px 65px rgba(0, 0, 0, 0.95),
+    0 3px 12px rgba(0, 0, 0, 0.6),
     inset 0 0 0 1px var(--gold),
     inset 0 0 0 3px var(--crimson-deep),
     inset 0 0 35px rgba(70, 45, 25, 0.22);
@@ -100,8 +100,8 @@ body {
     border-width: 8px;
     padding: 26px 28px 28px;
     box-shadow: 
-      0 26px 80px rgba(0, 0, 0, 0.88),
-      0 4px 18px rgba(0, 0, 0, 0.5),
+      0 30px 95px rgba(0, 0, 0, 0.96),
+      0 6px 24px rgba(0, 0, 0, 0.7),
       inset 0 0 0 2px var(--gold),
       inset 0 0 0 6px var(--crimson-deep),
       inset 0 0 0 8px rgba(238, 207, 135, 0.5),
@@ -175,25 +175,27 @@ header {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 2px;
+  gap: 6px;
   margin: 2px 0 4px;
 }
 .illuminated-letter {
   display: inline-grid;
   place-items: center;
-  width: 44px;
-  height: 52px;
+  width: clamp(52px, 6.5vw, 68px);
+  height: clamp(56px, 7vw, 74px);
   background: radial-gradient(circle at 40% 30%, #8b2339, var(--crimson-deep));
   color: var(--gold-bright);
   font-family: 'UnifrakturCook', cursive, serif;
-  font-size: 2.4rem;
+  font-size: clamp(2.8rem, 4.6vw, 3.8rem);
   font-weight: 700;
+  line-height: 1;
   border: 2px solid var(--gold);
-  outline: 1px solid var(--crimson-deep);
+  outline: 1.5px solid var(--crimson-deep);
   outline-offset: 2px;
-  border-radius: 2px;
-  box-shadow: 0 4px 10px rgba(40, 10, 18, 0.35), inset 0 0 10px rgba(0, 0, 0, 0.4);
-  margin-right: 2px;
+  border-radius: 3px;
+  box-shadow: 0 4px 12px rgba(40, 10, 18, 0.4), inset 0 0 12px rgba(0, 0, 0, 0.45);
+  margin-right: 4px;
+  vertical-align: middle;
 }
 .title-text {
   font-family: 'Cinzel', serif;
@@ -202,6 +204,8 @@ header {
   letter-spacing: 0.16em;
   color: var(--crimson-deep);
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8), 0 2px 3px rgba(80, 30, 20, 0.2);
+  line-height: 1;
+  display: inline-block;
 }
 
 .subtitle {
@@ -303,11 +307,13 @@ header {
 .input-wrapper {
   position: relative;
   margin-bottom: 10px;
+  display: flex;
+  align-items: center;
 }
 .word-input {
   width: 100%;
   min-height: 48px;
-  padding: 8px 14px;
+  padding: 8px 36px 8px 14px;
   background: rgba(255, 252, 245, 0.95);
   border: 1.5px solid rgba(120, 85, 48, 0.45);
   border-radius: 4px;
@@ -330,6 +336,37 @@ header {
   color: var(--ink-faint);
   font-weight: 400;
   font-size: 1.15rem;
+}
+
+.btn-clear {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--ink-faint);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.18s ease;
+}
+.btn-clear.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.btn-clear:hover {
+  background: rgba(99, 25, 41, 0.12);
+  border-color: var(--gold-dark);
+  color: var(--crimson-deep);
 }
 
 .btn-generate {
@@ -405,20 +442,31 @@ header {
   box-shadow: 0 2px 5px rgba(60, 15, 25, 0.25);
 }
 
-/* Process Flow mini-diagram */
+/* Process Flow diagram with 4 steps */
 .flow-steps {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 6px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: start;
+  gap: 4px;
   margin-top: 6px;
+  position: relative;
 }
 .flow-step {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  flex: 1;
+  position: relative;
+}
+.flow-step:not(:last-child)::after {
+  content: '→';
+  position: absolute;
+  top: 2px;
+  right: -6px;
+  color: var(--gold-dark);
+  font-size: 0.75rem;
+  opacity: 0.75;
+  pointer-events: none;
 }
 .step-num {
   width: 20px;
@@ -441,15 +489,10 @@ header {
   color: var(--crimson-deep);
 }
 .step-desc {
-  font-size: 0.7rem;
+  font-size: 0.66rem;
   color: var(--ink-muted);
   line-height: 1.25;
   margin-top: 2px;
-}
-.flow-arrow {
-  color: var(--gold-dark);
-  font-size: 0.8rem;
-  opacity: 0.7;
 }
 
 /* Centerpiece Column: The Illuminated Shield */
@@ -499,6 +542,12 @@ header {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.arms-heading.empty-state {
+  color: var(--ink-faint);
+  font-style: italic;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
 
 /* Stage containing botanical flanks & central shield */
 .shield-stage-wrapper {
@@ -543,6 +592,9 @@ header {
   z-index: 2;
   filter: drop-shadow(0 14px 20px rgba(45, 20, 10, 0.38));
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
+}
+.shield-mount.empty-mount {
+  filter: drop-shadow(0 4px 10px rgba(70, 45, 25, 0.1));
 }
 .shield-mount.revealing {
   transform: scale(0.96);
@@ -614,12 +666,57 @@ header {
   line-height: 1.35;
   padding: 0 4px;
 }
+.blazon-prose.empty-state {
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--ink-faint);
+}
+
+/* Motto Banderole / Ribbon on Blazon Scroll */
+.motto-ribbon {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.96rem;
+  font-style: italic;
+  font-weight: 600;
+  color: var(--crimson);
+  margin: 8px auto 4px;
+  padding: 3px 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  letter-spacing: 0.03em;
+  background: rgba(244, 235, 218, 0.7);
+  border-top: 1px dashed rgba(191, 160, 84, 0.5);
+  border-bottom: 1px dashed rgba(191, 160, 84, 0.5);
+  border-radius: 2px;
+  max-width: 90%;
+}
+.motto-ribbon:empty, .motto-ribbon.hidden {
+  display: none;
+}
+.motto-ribbon:not(:empty)::before {
+  content: '✦';
+  color: var(--gold);
+  font-size: 0.72rem;
+  font-style: normal;
+}
+.motto-ribbon:not(:empty)::after {
+  content: '✦';
+  color: var(--gold);
+  font-size: 0.72rem;
+  font-style: normal;
+}
+
 .tincture-rule-note {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 0.65rem;
   color: var(--ink-muted);
   margin-top: 6px;
   letter-spacing: 0.04em;
+}
+.tincture-rule-note.hidden {
+  display: none;
 }
 
 /* Heraldic Action Toolbar (Download SVG, Copy Blazon, Share Link) */
@@ -652,20 +749,48 @@ header {
   transition: all 0.18s ease;
   box-shadow: 0 1px 3px rgba(60, 30, 20, 0.08);
 }
-.action-btn:hover {
+.action-btn:hover:not(:disabled) {
   background: #ffffff;
   border-color: var(--crimson);
   color: var(--crimson);
   transform: translateY(-1px);
   box-shadow: 0 2px 6px rgba(60, 30, 20, 0.15);
 }
-.action-btn:active {
+.action-btn:active:not(:disabled) {
   transform: translateY(1px);
+}
+.action-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  border-color: rgba(140, 105, 65, 0.2);
+  color: var(--ink-faint);
+  box-shadow: none;
 }
 .action-btn svg {
   width: 12px;
   height: 12px;
   fill: currentColor;
+}
+
+/* Colophon Note under Actions */
+.colophon-line {
+  margin-top: 9px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--ink-muted);
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+.colophon-line a {
+  color: var(--crimson-deep);
+  text-decoration: underline;
+  text-decoration-color: rgba(191, 160, 84, 0.6);
+  text-underline-offset: 2px;
+  transition: color 0.15s ease;
+}
+.colophon-line a:hover {
+  color: var(--crimson-hover);
+  text-decoration-color: var(--crimson);
 }
 
 /* Wax Seal Badge */
@@ -783,6 +908,11 @@ header {
   overflow: hidden;
   position: relative;
 }
+.mini-swatch.swatch-empty {
+  background: #e8ded0;
+  border: 1px dashed rgba(120, 85, 48, 0.5);
+  box-shadow: none;
+}
 .breakdown-name {
   font-family: 'Cinzel', serif;
   font-size: 0.76rem;
@@ -797,20 +927,150 @@ header {
   font-weight: 600;
   text-align: right;
 }
+.breakdown-value.empty-val {
+  color: var(--ink-faint);
+  font-style: normal;
+  font-weight: 400;
+}
 
 .lore-text {
   font-size: 0.95rem;
   font-style: italic;
   color: var(--ink);
   line-height: 1.5;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
+.lore-text.hidden {
+  display: none;
+}
+
+/* Herald Interactive Button & Status */
+.btn-motto {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  min-height: 38px;
+  background: linear-gradient(180deg, #782133 0%, var(--crimson) 100%);
+  color: #fff6e0;
+  border: 1px solid var(--gold-dark);
+  border-radius: 4px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(60, 15, 25, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.2s ease;
+  touch-action: manipulation;
+  margin-top: 4px;
+}
+.btn-motto:hover:not(:disabled) {
+  background: linear-gradient(180deg, #8a293d 0%, var(--crimson-hover) 100%);
+  box-shadow: 0 4px 10px rgba(60, 15, 25, 0.4);
+  transform: translateY(-1px);
+}
+.btn-motto:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.btn-motto:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  border-color: rgba(140, 105, 65, 0.25);
+  color: var(--ink-faint);
+  box-shadow: none;
+}
+.btn-motto svg {
+  width: 13px;
+  height: 13px;
+  fill: currentColor;
+  transition: transform 0.2s ease;
+}
+.btn-motto.loading svg {
+  animation: quill-scribe 1s ease-in-out infinite alternate;
+}
+
+@keyframes quill-scribe {
+  0% {
+    transform: rotate(-8deg) translateY(0);
+  }
+  100% {
+    transform: rotate(10deg) translateY(-2px);
+  }
+}
+
+.motto-status {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.63rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--crimson-deep);
+  margin-top: 8px;
+  min-height: 16px;
+  line-height: 1.3;
+  text-align: center;
+}
+.motto-status.hidden {
+  display: none;
+}
+
+.motto-source {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  color: var(--ink-faint);
+  margin-top: 6px;
+  line-height: 1.35;
+  text-align: center;
+  border-top: 1px dashed rgba(120, 85, 48, 0.25);
+  padding-top: 6px;
+}
+.motto-source.hidden {
+  display: none;
+}
+
+.clew-suite-line {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  color: var(--ink-faint);
+  margin-top: 4px;
+  line-height: 1.35;
+  text-align: center;
+}
+.clew-suite-line a {
+  color: var(--crimson-deep);
+  text-decoration: underline;
+  text-decoration-color: rgba(191, 160, 84, 0.6);
+  text-underline-offset: 2px;
+  transition: color 0.15s ease;
+}
+.clew-suite-line a:hover {
+  color: var(--crimson-hover);
+  text-decoration-color: var(--crimson);
+}
+
 .lore-divider {
   text-align: center;
   color: var(--gold-dark);
   font-size: 0.75rem;
   opacity: 0.8;
   letter-spacing: 4px;
+  margin-top: 8px;
+}
+
+/* Swatch styling classes (no inline style="") */
+.swatch-fill-avalon-field {
+  background: linear-gradient(135deg, #d8b038 50%, #1d4e8b 50%);
+}
+.swatch-fill-avalon-tinctures {
+  background: linear-gradient(90deg, #d8b038 50%, #1d4e8b 50%);
+}
+.swatch-fill-avalon-charge {
+  background: radial-gradient(circle, #1d4e8b 45%, #d8b038 50%);
+}
+.swatch-fill-avalon-arrangement {
+  background: linear-gradient(45deg, #1d4e8b 50%, #d8b038 50%);
 }
 
 /* Footer */
