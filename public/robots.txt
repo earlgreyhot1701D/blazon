@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /motto
+
+Sitemap: https://blazon-g3jl.onrender.com/sitemap.xml
